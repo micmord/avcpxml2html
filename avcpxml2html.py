@@ -122,8 +122,6 @@ for lotto in lotti.iter('lotto'):
     foutput.write('<li><strong>Ditta:</strong> ' + partecipante.find('ragioneSociale').text + '<br/>')
     foutput.write('<strong>CF:</strong> ' + partecipante.find('codiceFiscale').text + '</li>')
   raggruppamenti = partecipanti.find('raggruppamento')
-  #if (raggruppamenti is not None):
-  #  pass
   for raggruppamento in partecipanti.iter('raggruppamento'):
     foutput.write('<li>Raggruppamento</li>')
     foutput.write('<ul>')
@@ -141,8 +139,6 @@ for lotto in lotti.iter('lotto'):
     foutput.write('<li><strong>Ditta:</strong> ' + aggiudicatario.find('ragioneSociale').text + '<br/>')
     foutput.write('<strong>CF:</strong> ' + aggiudicatario.find('codiceFiscale').text + '</li>')
   raggruppamenti = aggiudicatari.find('aggiudicatarioRaggruppamento')
-  #if (raggruppamenti is not None):
-  #  foutput.write('<li>Raggruppamento</li>')
   for raggruppamento in aggiudicatari.iter('aggiudicatarioRaggruppamento'):
     foutput.write('<li>Raggruppamento</li>')
     foutput.write('<ul>')

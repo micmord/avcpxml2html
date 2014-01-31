@@ -4,6 +4,12 @@ avcpxml2html
 Semplice programma per la conversione del file XML aderente alle specifiche
 tecniche di AVCP in ottemperanza a Art.1,comma 32,L.190/2012.
 
+Utilizzo::
+
+  avcpxml2html avcp_dataset_2013.xml
+
+Produce (*forse*) il file avcp_dataset_2013.xml.html
+
 Specifiche XML:
 
  * `http://dati.avcp.it/schema/datasetAppaltiL190.xsd`__
