@@ -1,8 +1,8 @@
 avcpxml2html
 ============
 
-Semplice programma per la conversione del file XML aderente alle specifiche
-tecniche di AVCP in ottemperanza a Art.1,comma 32,L.190/2012.
+Semplice programma per la conversione in HTML del file XML aderente alle specifiche
+tecniche di AVCP in ottemperanza a Art.1,comma 32,L.190/2012 (anticorruzione).
 
 Utilizzo::
 
