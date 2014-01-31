@@ -6,7 +6,7 @@ tecniche di AVCP in ottemperanza a Art.1,comma 32,L.190/2012.
 
 Utilizzo::
 
-  avcpxml2html avcp_dataset_2013.xml
+  python avcpxml2html.py avcp_dataset_2013.xml
 
 Produce (*forse*) il file avcp_dataset_2013.xml.html
 
