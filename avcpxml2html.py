@@ -87,23 +87,25 @@ foutput.write('\t'*2 + '<p>Licenza ' + metadata.find('licenza').text + '</p>\n')
 # Tabella dei lotti
 foutput.write('\t'*2 + '<table border="1">\n')
 # Intestazione
-foutput.write('\t'*3 + '<tr>\n' + '\t'*4 + '<th>Lotto</th>\n' + '\t'*4 + '<th>Partecipanti</th>\n' + '\t'*4 + '<th>Aggiudicatari</th>\n' + '\t'*3 + '</tr>\n')
+foutput.write('\t'*3 + '<thead>\n' + '\t'*4 + '<tr>\n' +
+    '\t'*5 + '<th>Lotto</th>\n' + '\t'*5 + '<th>Partecipanti</th>\n' + '\t'*5 + '<th>Aggiudicatari</th>\n' +
+    '\t'*4 + '</tr>\n' + '\t'*3 + '<thead>\n' + '\t'*3 + '<tbody>\n')
 
 lotti = root.find('data')
 # Ciclo principale su tutti i lotti
 for lotto in lotti.iter('lotto'):
   # Colonna lotti
-  foutput.write('\t'*3 + '<tr>\n' + '\t'*4 + '<td>\n' + '\t'* 5 + '<strong>CIG:</strong> ')
+  foutput.write('\t'*4 + '<tr>\n' + '\t'*5 + '<td>\n' + '\t'* 6 + '<strong>CIG:</strong> ')
   foutput.write(lotto.find('cig').text + '<br/>\n')
-  foutput.write('\t'*5 + '<strong>Oggetto del bando:</strong> ')
+  foutput.write('\t'*6 + '<strong>Oggetto del bando:</strong> ')
   foutput.write(lotto.find('oggetto').text + '<br/>\n')
-  foutput.write('\t'*5 + '<strong>Procedura di scelta del contraente:</strong> ')
+  foutput.write('\t'*6 + '<strong>Procedura di scelta del contraente:</strong> ')
   foutput.write(lotto.find('sceltaContraente').text + '<br/>\n')
-  foutput.write('\t'*5 + '<strong>Importo di aggiudicazione:</strong> ')
+  foutput.write('\t'*6 + '<strong>Importo di aggiudicazione:</strong> ')
   foutput.write(lotto.find('importoAggiudicazione').text + ' ' + u'\u20ac' + '<br/>\n')
-  foutput.write('\t'*5 + '<strong>Importo delle somme liquidate:</strong> ')
+  foutput.write('\t'*6 + '<strong>Importo delle somme liquidate:</strong> ')
   foutput.write(lotto.find('importoSommeLiquidate').text + ' ' + u'\u20ac' + '<br/>\n')
-  foutput.write('\t'*5 + '<strong>Tempi di completamento:</strong> dal ')
+  foutput.write('\t'*6 + '<strong>Tempi di completamento:</strong> dal ')
   dataInizio = lotto.find('tempiCompletamento').find('dataInizio')
   dataFine = lotto.find('tempiCompletamento').find('dataUltimazione')
   if ( dataInizio is not None):
@@ -115,56 +117,57 @@ for lotto in lotti.iter('lotto'):
     foutput.write(convertiData(dataFine.text))
   else:
     foutput.write('n/d')
-  foutput.write('\n' + '\t'*4 + '</td>\n')
+  foutput.write('\n' + '\t'*5 + '</td>\n')
   # Colonna partecipanti
-  foutput.write('\t'*4 + '<td>\n')
-  foutput.write('\t'*5 + '<ul>\n')
+  foutput.write('\t'*5 + '<td>\n')
+  foutput.write('\t'*6 + '<ul>\n')
   partecipanti=lotto.find('partecipanti')
   for partecipante in partecipanti.iter('partecipante'):
-    foutput.write('\t'*6 + '<li>\n' + '\t'*7 + '<strong>Ditta:</strong> ' + partecipante.find('ragioneSociale').text + '<br/>\n')
+    foutput.write('\t'*7 + '<li>\n' + '\t'*8 + '<strong>Ditta:</strong> ' + partecipante.find('ragioneSociale').text + '<br/>\n')
     if (partecipante.find('codiceFiscale') is not None):
-      foutput.write('\t'*7 + '<strong>C.F. :</strong> ' + partecipante.find('codiceFiscale').text + '\n' + '\t'*6 + '</li>\n')
+      foutput.write('\t'*8 + '<strong>C.F. :</strong> ' + partecipante.find('codiceFiscale').text + '\n' + '\t'*7 + '</li>\n')
     else:
-      foutput.write('\t'*7 + '<strong>I.F.E. :</strong> ' + partecipante.find('identificativoFiscaleEstero').text + '\n' + '\t'*6 + '</li>\n')
+      foutput.write('\t'*8 + '<strong>I.F.E. :</strong> ' + partecipante.find('identificativoFiscaleEstero').text + '\n' + '\t'*7 + '</li>\n')
   raggruppamenti = partecipanti.find('raggruppamento')
   for raggruppamento in partecipanti.iter('raggruppamento'):
-    foutput.write('\t'*6 + '<li>Raggruppamento</li>\n')
-    foutput.write('\t'*7 + '<ul>\n')
+    foutput.write('\t'*7 + '<li>Raggruppamento</li>\n')
+    foutput.write('\t'*8 + '<ul>\n')
     for membro in raggruppamento.iter('membro'):
-      foutput.write('\t'*8 + '<li>\n' + '\t'*9 + '<strong>Ditta:</strong> ' + membro.find('ragioneSociale').text + '<br/>\n')
+      foutput.write('\t'*9 + '<li>\n' + '\t'*10 + '<strong>Ditta:</strong> ' + membro.find('ragioneSociale').text + '<br/>\n')
       if (partecipante.find('codiceFiscale') is not None):
-        foutput.write('\t'*9 + '<strong>C.F. :</strong> ' + partecipante.find('codiceFiscale').text + '<br/>\n')
+        foutput.write('\t'*10 + '<strong>C.F. :</strong> ' + partecipante.find('codiceFiscale').text + '<br/>\n')
       else:
-        foutput.write('\t'*9 + '<strong>I.F.E. : </strong> ' + partecipante.find('identificativoFiscaleEstero').text + '<br/>\n')
-      foutput.write('\t'*9 + '<strong>Ruolo:</strong> ' + membro.find('ruolo').text + '\n' + '\t'*8 + '</li>\n')
-    foutput.write('\t'*7 + '</ul>\n')
-  foutput.write('\t'*5 + '</ul>\n')
-  foutput.write('\t'*4 + '</td>\n')
+        foutput.write('\t'*10 + '<strong>I.F.E. : </strong> ' + partecipante.find('identificativoFiscaleEstero').text + '<br/>\n')
+      foutput.write('\t'*10 + '<strong>Ruolo:</strong> ' + membro.find('ruolo').text + '\n' + '\t'*9 + '</li>\n')
+    foutput.write('\t'*8 + '</ul>\n')
+  foutput.write('\t'*6 + '</ul>\n')
+  foutput.write('\t'*5 + '</td>\n')
   # Colonna aggiudicatari
-  foutput.write('\t'*4 + '<td>\n')
-  foutput.write('\t'*5 + '<ul>\n')
+  foutput.write('\t'*5 + '<td>\n')
+  foutput.write('\t'*6 + '<ul>\n')
   aggiudicatari=lotto.find('aggiudicatari')
   for aggiudicatario in aggiudicatari.iter('aggiudicatario'):
-    foutput.write('\t'*6 + '<li>\n' + '\t'*7 + '<strong>Ditta:</strong> ' + aggiudicatario.find('ragioneSociale').text + '<br/>\n')
+    foutput.write('\t'*7 + '<li>\n' + '\t'*8 + '<strong>Ditta:</strong> ' + aggiudicatario.find('ragioneSociale').text + '<br/>\n')
     if (partecipante.find('codiceFiscale') is not None):
-      foutput.write('\t'*7 + '<strong>C.F. :</strong> ' + partecipante.find('codiceFiscale').text + '\n' + '\t'*6 + '</li>\n')
+      foutput.write('\t'*8 + '<strong>C.F. :</strong> ' + partecipante.find('codiceFiscale').text + '\n' + '\t'*7 + '</li>\n')
     else:
-      foutput.write('\t'*7 + '<strong>I.F.E. :</strong> ' + partecipante.find('identificativoFiscaleEstero').text + '\n' + '\t'*6 + '</li>\n')
+      foutput.write('\t'*8 + '<strong>I.F.E. :</strong> ' + partecipante.find('identificativoFiscaleEstero').text + '\n' + '\t'*7 + '</li>\n')
   raggruppamenti = aggiudicatari.find('aggiudicatarioRaggruppamento')
   for raggruppamento in aggiudicatari.iter('aggiudicatarioRaggruppamento'):
-    foutput.write('\t'*6 + '<li>Raggruppamento</li>\n')
-    foutput.write('\t'*7 + '<ul>\n')
+    foutput.write('\t'*7 + '<li>Raggruppamento</li>\n')
+    foutput.write('\t'*8 + '<ul>\n')
     for membro in raggruppamento.iter('membro'):
-      foutput.write('\t'*8 + '<li>\n' + '\t'*9 + '<strong>Ditta:</strong> ' + membro.find('ragioneSociale').text + '<br/>\n')
+      foutput.write('\t'*9 + '<li>\n' + '\t'*10 + '<strong>Ditta:</strong> ' + membro.find('ragioneSociale').text + '<br/>\n')
       if (partecipante.find('codiceFiscale') is not None):
-        foutput.write('\t'*9 + '<strong>C.F. :</strong> ' + partecipante.find('codiceFiscale').text + '<br/>\n')
+        foutput.write('\t'*10 + '<strong>C.F. :</strong> ' + partecipante.find('codiceFiscale').text + '<br/>\n')
       else:
-        foutput.write('\t'*9 + '<strong>I.F.E. :</strong> ' + partecipante.find('identificativoFiscaleEstero').text + '<br/>\n')
-      foutput.write('\t'*9 + '<strong>Ruolo:</strong> ' + membro.find('ruolo').text + '\n' + '\t'*8 + '</li>\n')
-    foutput.write('\t'*7 + '</ul>\n')
-  foutput.write('\t'*5 + '</ul>\n')
-  foutput.write('\t'*4 + '</td>\n')
-  foutput.write('\t'*3 + '</tr>\n')
+        foutput.write('\t'*10 + '<strong>I.F.E. :</strong> ' + partecipante.find('identificativoFiscaleEstero').text + '<br/>\n')
+      foutput.write('\t'*10 + '<strong>Ruolo:</strong> ' + membro.find('ruolo').text + '\n' + '\t'*9 + '</li>\n')
+    foutput.write('\t'*8 + '</ul>\n')
+  foutput.write('\t'*6 + '</ul>\n')
+  foutput.write('\t'*5 + '</td>\n')
+  foutput.write('\t'*4 + '</tr>\n')
+foutput.write('\t'*3 + '</tbody>\n')
 foutput.write('\t'*2 + '</table>\n')
 foutput.write('\t</body>\n')
 foutput.write('</html>\n')
