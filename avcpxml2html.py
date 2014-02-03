@@ -130,7 +130,7 @@ for lotto in lotti.iter('lotto'):
       foutput.write('\t'*8 + '<strong>I.F.E. :</strong> ' + partecipante.find('identificativoFiscaleEstero').text + '\n' + '\t'*7 + '</li>\n')
   raggruppamenti = partecipanti.find('raggruppamento')
   for raggruppamento in partecipanti.iter('raggruppamento'):
-    foutput.write('\t'*7 + '<li>Raggruppamento</li>\n')
+    foutput.write('\t'*7 + '<li>Raggruppamento\n')
     foutput.write('\t'*8 + '<ul>\n')
     for membro in raggruppamento.iter('membro'):
       foutput.write('\t'*9 + '<li>\n' + '\t'*10 + '<strong>Ditta:</strong> ' + membro.find('ragioneSociale').text + '<br/>\n')
@@ -140,6 +140,7 @@ for lotto in lotti.iter('lotto'):
         foutput.write('\t'*10 + '<strong>I.F.E. : </strong> ' + partecipante.find('identificativoFiscaleEstero').text + '<br/>\n')
       foutput.write('\t'*10 + '<strong>Ruolo:</strong> ' + membro.find('ruolo').text + '\n' + '\t'*9 + '</li>\n')
     foutput.write('\t'*8 + '</ul>\n')
+    foutput.write('\t'*7 + '</li>\n')
   foutput.write('\t'*6 + '</ul>\n')
   foutput.write('\t'*5 + '</td>\n')
   # Colonna aggiudicatari
@@ -154,7 +155,7 @@ for lotto in lotti.iter('lotto'):
       foutput.write('\t'*8 + '<strong>I.F.E. :</strong> ' + partecipante.find('identificativoFiscaleEstero').text + '\n' + '\t'*7 + '</li>\n')
   raggruppamenti = aggiudicatari.find('aggiudicatarioRaggruppamento')
   for raggruppamento in aggiudicatari.iter('aggiudicatarioRaggruppamento'):
-    foutput.write('\t'*7 + '<li>Raggruppamento</li>\n')
+    foutput.write('\t'*7 + '<li>Raggruppamento\n')
     foutput.write('\t'*8 + '<ul>\n')
     for membro in raggruppamento.iter('membro'):
       foutput.write('\t'*9 + '<li>\n' + '\t'*10 + '<strong>Ditta:</strong> ' + membro.find('ragioneSociale').text + '<br/>\n')
@@ -164,6 +165,7 @@ for lotto in lotti.iter('lotto'):
         foutput.write('\t'*10 + '<strong>I.F.E. :</strong> ' + partecipante.find('identificativoFiscaleEstero').text + '<br/>\n')
       foutput.write('\t'*10 + '<strong>Ruolo:</strong> ' + membro.find('ruolo').text + '\n' + '\t'*9 + '</li>\n')
     foutput.write('\t'*8 + '</ul>\n')
+    foutput.write('\t'*7 + '</li>\n')
   foutput.write('\t'*6 + '</ul>\n')
   foutput.write('\t'*5 + '</td>\n')
   foutput.write('\t'*4 + '</tr>\n')
