@@ -99,7 +99,7 @@ for lotto in lotti.iter('lotto'):
   foutput.write(lotto.find('oggetto').text + '<br/>')
   foutput.write('<strong>Procedura di scelta del contraente:</strong> ')
   foutput.write(lotto.find('sceltaContraente').text + '<br/>')
-  foutput.write('<strong>Importo di aggiudiczione:</strong> ')
+  foutput.write('<strong>Importo di aggiudicazione:</strong> ')
   foutput.write(lotto.find('importoAggiudicazione').text + ' ' + u'\u20ac' + '<br/>')
   foutput.write('<strong>Importo delle somme liquidate:</strong> ')
   foutput.write(lotto.find('importoSommeLiquidate').text + ' ' + u'\u20ac' + '<br/>')
