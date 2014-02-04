@@ -24,7 +24,7 @@ Specifiche XML:
 Tested with Python 2.7
 
 @author: Michele Mordenti
-@version: 0.0.1
+@version: 0.2
 '''
 
 import sys
@@ -75,17 +75,34 @@ metadata = root.find('metadata')
 foutput.write('<!DOCTYPE html>\n')
 foutput.write('<html>\n')
 foutput.write(INDENT + '<head>\n')
-foutput.write(INDENT*2 + '<title>' + metadata.find('titolo').text + '</title>\n')
+titolo = metadata.find('titolo')
+if (titolo.text is not None):
+  foutput.write(INDENT*2 + '<title>' + titolo.text + '</title>\n')
 foutput.write(INDENT*2 + '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />\n')
 foutput.write(INDENT + '</head>\n')
 foutput.write(INDENT + '<body>\n')
-foutput.write(INDENT*2 + '<h1>' + metadata.find('entePubblicatore').text + '</h1>\n')
-foutput.write(INDENT*2 + '<h2>' + metadata.find('titolo').text + '</h2>\n')
-foutput.write(INDENT*2 + '<h3>' + metadata.find('abstract').text + '</h3>\n')
+if (metadata.find('entePubblicatore').text is not None):
+  foutput.write(INDENT*2 + '<h1>' + metadata.find('entePubblicatore').text + '</h1>\n')
+else:
+  foutput.write(INDENT*2 + '<h1>Ente ignoto</h1>\n')
+if (titolo.text is not None):
+  foutput.write(INDENT*2 + '<h2>' + titolo.text + '</h2>\n')
+else:
+  foutput.write(INDENT*2 + '<h2>titolo assente</h2>\n')
+if (metadata.find('abstract').text is not None):
+  foutput.write(INDENT*2 + '<h3>' + metadata.find('abstract').text + '</h3>\n')
+else:
+  foutput.write(INDENT*2 + '<h3>abstract assente</h3>\n')
 foutput.write(INDENT*2 + '<p>Data pubblicazione: ' + convertiData(metadata.find('dataPubbicazioneDataset').text) + '</p>\n')
 foutput.write(INDENT*2 + '<p>Data ultimo aggiornamento: ' + convertiData(metadata.find('dataUltimoAggiornamentoDataset').text) + '</p>\n')
-foutput.write(INDENT*2 + '<p>URL XML: <a href="' + metadata.find('urlFile').text + '">' + metadata.find('urlFile').text + '</a></p>\n')
-foutput.write(INDENT*2 + '<p>Licenza ' + metadata.find('licenza').text + '</p>\n')
+if (metadata.find('urlFile').text is not None):
+  foutput.write(INDENT*2 + '<p>URL XML: <a href="' + metadata.find('urlFile').text + '">' + metadata.find('urlFile').text + '</a></p>\n')
+else:
+  foutput.write(INDENT*2 + '<p>URL XML: assente</p>\n')
+if (metadata.find('licenza').text is not None):
+  foutput.write(INDENT*2 + '<p>Licenza: ' + metadata.find('licenza').text + '</p>\n')
+else:
+  foutput.write(INDENT*2 + '<p>Licenza: assente</p>\n')
 
 # Tabella dei lotti
 foutput.write(INDENT*2 + '<table border="1">\n')
