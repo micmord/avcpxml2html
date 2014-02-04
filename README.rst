@@ -1,7 +1,7 @@
 avcpxml2html
 ============
 
-Semplice programma per la conversione in HTML del file XML aderente alle `specifiche tecniche`__
+Semplice programma per la conversione in HTML del file XML aderente alle specifiche tecniche
 di `AVCP`__ in ottemperanza a Art.1,comma 32,L.190/2012 (anticorruzione).
 
 Utilizzo
@@ -23,6 +23,7 @@ Un modo per validare il file XML in ingresso è fare uso del programma `xmllint`
 Specifiche AVCP XML
 -------------------
 
+ * `Specifiche tecniche`__
  * `http://dati.avcp.it/schema/datasetAppaltiL190.xsd`__
  * `http://dati.avcp.it/schema/TypesL190.xsd`__
 
@@ -36,9 +37,11 @@ Tested with Python 2.7
 :version: 0.2
 :license: GNU GPL v.3
 
-__ http://www.avcp.it/portal/rest/jcr/repository/collaboration/Digital%20Assets/pdf/AllCom27.05.13SpecificeTecnichev1.0.pdf
+
 __ http:/www.avcp.it
 __ http://xmlsoft.org/xmllint.html
 __ http://xmlsoft.org/
+__ http://www.avcp.it/portal/rest/jcr/repository/collaboration/Digital%20Assets/pdf/AllCom27.05.13SpecificeTecnichev1.0.pdf
 __ http://dati.avcp.it/schema/datasetAppaltiL190.xsd
 __ http://dati.avcp.it/schema/TypesL190.xsd
+
