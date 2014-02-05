@@ -56,13 +56,22 @@ except IOError:
 
 
 def convertiData(data):
-  '''Banale funzione di conversione della data'''
+  '''Banale funzione di conversione della data
+     input "aaaa-mm-gg" output "gg/mm/aaaa"
+     input "aaaa-mm-gg+hh:mm" output "gg/mm/aaaa (+hh:mm)"
+  '''
   newData="n/d"
   if (data is not None):
-    l = data.split('-')
-    if (len(l)!=3):
+    fuso = data.split('+')
+    data1 = fuso[0]
+    if len(fuso) == 2:
+      f = ' (+' + fuso[1] + ')'
+    else:
+      f = ''
+    data2 = data1.split('-')
+    if (len(data2)!=3):
       return newData
-    newData = l[2] + '/' + l[1] + '/' + l[0]
+    newData = data2[2] + '/' + data2[1] + '/' + data2[0] + f
     return newData
   return newData
 
