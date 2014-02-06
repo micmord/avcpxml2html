@@ -30,6 +30,7 @@ Tested with Python 2.7
 import sys
 import xml.etree.ElementTree as ET
 import codecs
+import re
 
 
 # PARAMETRI
@@ -57,23 +58,20 @@ except IOError:
 
 def convertiData(data):
   '''Banale funzione di conversione della data
-     input "aaaa-mm-gg" output "gg/mm/aaaa"
-     input "aaaa-mm-gg+hh:mm" output "gg/mm/aaaa (+hh:mm)"
+     input: None --> output: "n/d"
+     input: "aaaa-mm-gg" --> output: "gg/mm/aaaa"
+     input: "aaaa-mm-gg+hh:mm" --> output: "gg/mm/aaaa (+hh:mm)"
+     input: * --> output *
   '''
-  newData="n/d"
   if (data is not None):
-    fuso = data.split('+')
-    data1 = fuso[0]
-    if len(fuso) == 2:
-      f = ' (+' + fuso[1] + ')'
-    else:
-      f = ''
-    data2 = data1.split('-')
-    if (len(data2)!=3):
-      return newData
-    newData = data2[2] + '/' + data2[1] + '/' + data2[0] + f
-    return newData
-  return newData
+    if (re.match('^\d{4}-\d{2}-\d{2}$',data) is not None):
+      p = re.compile('(\d+)-(\d+)-(\d+)')
+      return p.match(data).group(3) + '/' + p.match(data).group(2) + '/' + p.match(data).group(1)
+    if (re.match('^\d{4}-\d{2}-\d{2}\+\d{2}:\d{2}$',data)):
+      p = re.compile('(\d+)-(\d+)-(\d+)\+(\d+:\d+)')
+      return p.match(data).group(3) + '/' + p.match(data).group(2) + '/' + p.match(data).group(1) + ' (+' + p.match(data).group(4) + ')'
+    return data
+  return 'n/d'
 
 # Radice del tracciato XML
 root = tree.getroot()
