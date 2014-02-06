@@ -38,7 +38,7 @@ CODIFICA_XML_SORGENTE='utf-8'
 INDENT = '\t' # tabulazione
 #INDENT = '' # nessuna indentazione
 #INDENT = '  ' # due spazi bianchi
-
+ND = 'n/d' # rappresentazione dato non disponibile
 
 # Leggo argomenti
 if len(sys.argv)!=2 :
@@ -58,7 +58,7 @@ except IOError:
 
 def convertiData(data):
   '''Banale funzione di conversione della data
-     input: None --> output: "n/d"
+     input: None --> output: ND
      input: "aaaa-mm-gg" --> output: "gg/mm/aaaa"
      input: "aaaa-mm-gg+hh:mm" --> output: "gg/mm/aaaa (+hh:mm)"
      input: * --> output *
@@ -66,12 +66,17 @@ def convertiData(data):
   if (data is not None):
     if (re.match('^\d{4}-\d{2}-\d{2}$',data) is not None):
       p = re.compile('(\d+)-(\d+)-(\d+)')
-      return p.match(data).group(3) + '/' + p.match(data).group(2) + '/' + p.match(data).group(1)
-    if (re.match('^\d{4}-\d{2}-\d{2}\+\d{2}:\d{2}$',data)):
+      return p.match(data).group(3) + '/' + \
+             p.match(data).group(2) + '/' + \
+             p.match(data).group(1)
+    if (re.match('^\d{4}-\d{2}-\d{2}\+\d{2}:\d{2}$',data) is not None):
       p = re.compile('(\d+)-(\d+)-(\d+)\+(\d+:\d+)')
-      return p.match(data).group(3) + '/' + p.match(data).group(2) + '/' + p.match(data).group(1) + ' (+' + p.match(data).group(4) + ')'
+      return p.match(data).group(3) + '/' + \
+             p.match(data).group(2) + '/' + \
+             p.match(data).group(1) + ' (+' + \
+             p.match(data).group(4) + ')'
     return data
-  return 'n/d'
+  return ND
 
 # Radice del tracciato XML
 root = tree.getroot()
@@ -138,12 +143,12 @@ for lotto in lotti.iter('lotto'):
   if ( dataInizio is not None):
     foutput.write(convertiData(dataInizio.text))
   else:
-    foutput.write('n/d')
+    foutput.write(ND)
   foutput.write(' al ')
   if (dataFine is not None):
     foutput.write(convertiData(dataFine.text))
   else:
-    foutput.write('n/d')
+    foutput.write(ND)
   foutput.write('\n' + INDENT*5 + '</td>\n')
   # Colonna partecipanti
   foutput.write(INDENT*5 + '<td>\n')
