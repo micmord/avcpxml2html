@@ -83,7 +83,7 @@ root = tree.getroot()
 # metadata tag
 metadata = root.find('metadata')
 
-# Heder HTML
+# Header HTML
 foutput.write('<!DOCTYPE html>\n')
 foutput.write('<html>\n')
 foutput.write(INDENT + '<head>\n')
