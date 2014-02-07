@@ -160,16 +160,15 @@ for lotto in lotti.iter('lotto'):
       foutput.write(INDENT*8 + '<strong>C.F. :</strong> ' + partecipante.find('codiceFiscale').text + '\n' + INDENT*7 + '</li>\n')
     else:
       foutput.write(INDENT*8 + '<strong>I.F.E. :</strong> ' + partecipante.find('identificativoFiscaleEstero').text + '\n' + INDENT*7 + '</li>\n')
-  raggruppamenti = partecipanti.find('raggruppamento')
   for raggruppamento in partecipanti.iter('raggruppamento'):
     foutput.write(INDENT*7 + '<li>Raggruppamento\n')
     foutput.write(INDENT*8 + '<ul>\n')
     for membro in raggruppamento.iter('membro'):
       foutput.write(INDENT*9 + '<li>\n' + INDENT*10 + '<strong>Ditta:</strong> ' + membro.find('ragioneSociale').text + '<br/>\n')
-      if (partecipante.find('codiceFiscale') is not None):
-        foutput.write(INDENT*10 + '<strong>C.F. :</strong> ' + partecipante.find('codiceFiscale').text + '<br/>\n')
+      if (membro.find('codiceFiscale') is not None):
+        foutput.write(INDENT*10 + '<strong>C.F. :</strong> ' + membro.find('codiceFiscale').text + '<br/>\n')
       else:
-        foutput.write(INDENT*10 + '<strong>I.F.E. : </strong> ' + partecipante.find('identificativoFiscaleEstero').text + '<br/>\n')
+        foutput.write(INDENT*10 + '<strong>I.F.E. : </strong> ' + membro.find('identificativoFiscaleEstero').text + '<br/>\n')
       foutput.write(INDENT*10 + '<strong>Ruolo:</strong> ' + membro.find('ruolo').text + '\n' + INDENT*9 + '</li>\n')
     foutput.write(INDENT*8 + '</ul>\n')
     foutput.write(INDENT*7 + '</li>\n')
@@ -181,20 +180,19 @@ for lotto in lotti.iter('lotto'):
   aggiudicatari=lotto.find('aggiudicatari')
   for aggiudicatario in aggiudicatari.iter('aggiudicatario'):
     foutput.write(INDENT*7 + '<li>\n' + INDENT*8 + '<strong>Ditta:</strong> ' + aggiudicatario.find('ragioneSociale').text + '<br/>\n')
-    if (partecipante.find('codiceFiscale') is not None):
-      foutput.write(INDENT*8 + '<strong>C.F. :</strong> ' + partecipante.find('codiceFiscale').text + '\n' + INDENT*7 + '</li>\n')
+    if (aggiudicatario.find('codiceFiscale') is not None):
+      foutput.write(INDENT*8 + '<strong>C.F. :</strong> ' + aggiudicatario.find('codiceFiscale').text + '\n' + INDENT*7 + '</li>\n')
     else:
-      foutput.write(INDENT*8 + '<strong>I.F.E. :</strong> ' + partecipante.find('identificativoFiscaleEstero').text + '\n' + INDENT*7 + '</li>\n')
-  raggruppamenti = aggiudicatari.find('aggiudicatarioRaggruppamento')
+      foutput.write(INDENT*8 + '<strong>I.F.E. :</strong> ' + aggiudicatario.find('identificativoFiscaleEstero').text + '\n' + INDENT*7 + '</li>\n')
   for raggruppamento in aggiudicatari.iter('aggiudicatarioRaggruppamento'):
     foutput.write(INDENT*7 + '<li>Raggruppamento\n')
     foutput.write(INDENT*8 + '<ul>\n')
     for membro in raggruppamento.iter('membro'):
       foutput.write(INDENT*9 + '<li>\n' + INDENT*10 + '<strong>Ditta:</strong> ' + membro.find('ragioneSociale').text + '<br/>\n')
-      if (partecipante.find('codiceFiscale') is not None):
-        foutput.write(INDENT*10 + '<strong>C.F. :</strong> ' + partecipante.find('codiceFiscale').text + '<br/>\n')
+      if (membro.find('codiceFiscale') is not None):
+        foutput.write(INDENT*10 + '<strong>C.F. :</strong> ' + membro.find('codiceFiscale').text + '<br/>\n')
       else:
-        foutput.write(INDENT*10 + '<strong>I.F.E. :</strong> ' + partecipante.find('identificativoFiscaleEstero').text + '<br/>\n')
+        foutput.write(INDENT*10 + '<strong>I.F.E. :</strong> ' + membro.find('identificativoFiscaleEstero').text + '<br/>\n')
       foutput.write(INDENT*10 + '<strong>Ruolo:</strong> ' + membro.find('ruolo').text + '\n' + INDENT*9 + '</li>\n')
     foutput.write(INDENT*8 + '</ul>\n')
     foutput.write(INDENT*7 + '</li>\n')
