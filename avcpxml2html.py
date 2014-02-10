@@ -66,15 +66,15 @@ def convertiData(data):
   if (data is not None):
     if (re.match('^\d{4}-\d{2}-\d{2}$',data) is not None):
       p = re.compile('(\d+)-(\d+)-(\d+)')
-      return p.match(data).group(3) + '/' + \
-             p.match(data).group(2) + '/' + \
-             p.match(data).group(1)
+      return (p.match(data).group(3) + '/' +
+             p.match(data).group(2) + '/' +
+             p.match(data).group(1))
     if (re.match('^\d{4}-\d{2}-\d{2}\+\d{2}:\d{2}$',data) is not None):
       p = re.compile('(\d+)-(\d+)-(\d+)\+(\d+:\d+)')
-      return p.match(data).group(3) + '/' + \
-             p.match(data).group(2) + '/' + \
-             p.match(data).group(1) + ' (+' + \
-             p.match(data).group(4) + ')'
+      return (p.match(data).group(3) + '/' +
+             p.match(data).group(2) + '/' +
+             p.match(data).group(1) + ' (+' +
+             p.match(data).group(4) + ')')
     return data
   return ND
 
