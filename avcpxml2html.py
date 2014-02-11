@@ -24,7 +24,7 @@ Specifiche XML:
 Tested with Python 2.7
 
 @author: Michele Mordenti
-@version: 0.2
+@version: 0.3-dev
 '''
 
 import sys
@@ -116,91 +116,125 @@ if (metadata.find('licenza').text is not None):
 else:
   foutput.write(INDENT*2 + '<p>Licenza: assente</p>\n')
 
-# Tabella dei lotti
-foutput.write(INDENT*2 + '<table border="1">\n')
-# Intestazione
-foutput.write(INDENT*3 + '<thead>\n' + INDENT*4 + '<tr>\n' +
-    INDENT*5 + '<th>Lotto</th>\n' + INDENT*5 + '<th>Partecipanti</th>\n' + INDENT*5 + '<th>Aggiudicatari</th>\n' +
-    INDENT*4 + '</tr>\n' + INDENT*3 + '<thead>\n' + INDENT*3 + '<tbody>\n')
+
+# Costruisco un dizionario dei proponenti, per ognuno dei quali
+# avro' una tabella separata dei relativi lotti.
+# Chiave: Codice Fiscale proponente
+# Valore: Lista di due elementi
+#  - primo elemento: descrizione ente proponente
+#  - secondo elemento: lista di lotti corrispondenti ad ogni riga della relativa tabella
+dizionarioProponenti = {}
 
 lotti = root.find('data')
 # Ciclo principale su tutti i lotti
 for lotto in lotti.iter('lotto'):
+  proponente = lotto.find('strutturaProponente').find('denominazione').text
+  cfp = lotto.find('strutturaProponente').find('codiceFiscaleProp').text
+  if not dizionarioProponenti.has_key(cfp):
+    dizionarioProponenti[cfp] = [proponente,[]]
   # Colonna lotti
-  foutput.write(INDENT*4 + '<tr>\n' + INDENT*5 + '<td>\n' + INDENT* 6 + '<strong>CIG:</strong> ')
-  foutput.write(lotto.find('cig').text + '<br/>\n')
-  foutput.write(INDENT*6 + '<strong>Oggetto del bando:</strong> ')
-  foutput.write(lotto.find('oggetto').text + '<br/>\n')
-  foutput.write(INDENT*6 + '<strong>Procedura di scelta del contraente:</strong> ')
-  foutput.write(lotto.find('sceltaContraente').text + '<br/>\n')
-  foutput.write(INDENT*6 + '<strong>Importo di aggiudicazione:</strong> ')
-  foutput.write(lotto.find('importoAggiudicazione').text + ' ' + u'\u20ac' + '<br/>\n')
-  foutput.write(INDENT*6 + '<strong>Importo delle somme liquidate:</strong> ')
-  foutput.write(lotto.find('importoSommeLiquidate').text + ' ' + u'\u20ac' + '<br/>\n')
-  foutput.write(INDENT*6 + '<strong>Tempi di completamento:</strong> dal ')
-  dataInizio = lotto.find('tempiCompletamento').find('dataInizio')
+  tableRow = INDENT*4 + '<tr>\n' + INDENT*5 + '<td>\n' + INDENT* 6 + '<strong>CIG:</strong> '
+  tableRow += lotto.find('cig').text + '<br/>\n'
+  tableRow += INDENT*6 + '<strong>Oggetto del bando:</strong> '
+  tableRow += lotto.find('oggetto').text + '<br/>\n'
+  tableRow += INDENT*6 + '<strong>Procedura di scelta del contraente:</strong> '
+  tableRow += lotto.find('sceltaContraente').text + '<br/>\n'
+  tableRow += INDENT*6 + '<strong>Importo di aggiudicazione:</strong> '
+  tableRow += lotto.find('importoAggiudicazione').text + ' ' + u'\u20ac' + '<br/>\n'
+  tableRow += INDENT*6 + '<strong>Importo delle somme liquidate:</strong> '
+  tableRow += lotto.find('importoSommeLiquidate').text + ' ' + u'\u20ac' + '<br/>\n'
+  tableRow += INDENT*6 + '<strong>Tempi di completamento:</strong> dal '
+  dataInizio =lotto.find('tempiCompletamento').find('dataInizio')
   dataFine = lotto.find('tempiCompletamento').find('dataUltimazione')
   if ( dataInizio is not None):
-    foutput.write(convertiData(dataInizio.text))
+    tableRow += convertiData(dataInizio.text)
   else:
-    foutput.write(ND)
-  foutput.write(' al ')
+    tableRow += ND
+  tableRow += ' al '
   if (dataFine is not None):
-    foutput.write(convertiData(dataFine.text))
+    tableRow += convertiData(dataFine.text)
   else:
-    foutput.write(ND)
-  foutput.write('\n' + INDENT*5 + '</td>\n')
+    tableRow += ND
+  tableRow += '\n' + INDENT*5 + '</td>\n'
   # Colonna partecipanti
-  foutput.write(INDENT*5 + '<td>\n')
-  foutput.write(INDENT*6 + '<ul>\n')
+  tableRow += INDENT*5 + '<td>\n'
+  tableRow += INDENT*6 + '<ul>\n'
   partecipanti=lotto.find('partecipanti')
   for partecipante in partecipanti.iter('partecipante'):
-    foutput.write(INDENT*7 + '<li>\n' + INDENT*8 + '<strong>Ditta:</strong> ' + partecipante.find('ragioneSociale').text + '<br/>\n')
+    tableRow += INDENT*7 + '<li>\n' + INDENT*8 + '<strong>Ditta:</strong> ' + partecipante.find('ragioneSociale').text + '<br/>\n'
     if (partecipante.find('codiceFiscale') is not None):
-      foutput.write(INDENT*8 + '<strong>C.F. :</strong> ' + partecipante.find('codiceFiscale').text + '\n' + INDENT*7 + '</li>\n')
+      tableRow += INDENT*8 + '<strong>C.F. :</strong> ' + partecipante.find('codiceFiscale').text + '\n' + INDENT*7 + '</li>\n'
     else:
-      foutput.write(INDENT*8 + '<strong>I.F.E. :</strong> ' + partecipante.find('identificativoFiscaleEstero').text + '\n' + INDENT*7 + '</li>\n')
+      tableRow += INDENT*8 + '<strong>I.F.E. :</strong> ' + partecipante.find('identificativoFiscaleEstero').text + '\n' + INDENT*7 + '</li>\n'
   for raggruppamento in partecipanti.iter('raggruppamento'):
-    foutput.write(INDENT*7 + '<li>Raggruppamento\n')
-    foutput.write(INDENT*8 + '<ul>\n')
+    tableRow += INDENT*7 + '<li>Raggruppamento\n'
+    tableRow += INDENT*8 + '<ul>\n'
     for membro in raggruppamento.iter('membro'):
-      foutput.write(INDENT*9 + '<li>\n' + INDENT*10 + '<strong>Ditta:</strong> ' + membro.find('ragioneSociale').text + '<br/>\n')
+      tableRow += INDENT*9 + '<li>\n' + INDENT*10 + '<strong>Ditta:</strong> ' + membro.find('ragioneSociale').text + '<br/>\n'
       if (membro.find('codiceFiscale') is not None):
-        foutput.write(INDENT*10 + '<strong>C.F. :</strong> ' + membro.find('codiceFiscale').text + '<br/>\n')
+        tableRow += INDENT*10 + '<strong>C.F. :</strong> ' + membro.find('codiceFiscale').text + '<br/>\n'
       else:
-        foutput.write(INDENT*10 + '<strong>I.F.E. : </strong> ' + membro.find('identificativoFiscaleEstero').text + '<br/>\n')
-      foutput.write(INDENT*10 + '<strong>Ruolo:</strong> ' + membro.find('ruolo').text + '\n' + INDENT*9 + '</li>\n')
-    foutput.write(INDENT*8 + '</ul>\n')
-    foutput.write(INDENT*7 + '</li>\n')
-  foutput.write(INDENT*6 + '</ul>\n')
-  foutput.write(INDENT*5 + '</td>\n')
+        tableRow += INDENT*10 + '<strong>I.F.E. : </strong> ' + membro.find('identificativoFiscaleEstero').text + '<br/>\n'
+      tableRow += INDENT*10 + '<strong>Ruolo:</strong> ' + membro.find('ruolo').text + '\n' + INDENT*9 + '</li>\n'
+    tableRow += INDENT*8 + '</ul>\n'
+    tableRow += INDENT*7 + '</li>\n'
+  tableRow += INDENT*6 + '</ul>\n'
+  tableRow += INDENT*5 + '</td>\n'
   # Colonna aggiudicatari
-  foutput.write(INDENT*5 + '<td>\n')
-  foutput.write(INDENT*6 + '<ul>\n')
+  tableRow += INDENT*5 + '<td>\n'
+  tableRow += INDENT*6 + '<ul>\n'
   aggiudicatari=lotto.find('aggiudicatari')
   for aggiudicatario in aggiudicatari.iter('aggiudicatario'):
-    foutput.write(INDENT*7 + '<li>\n' + INDENT*8 + '<strong>Ditta:</strong> ' + aggiudicatario.find('ragioneSociale').text + '<br/>\n')
+    tableRow += INDENT*7 + '<li>\n' + INDENT*8 + '<strong>Ditta:</strong> ' + aggiudicatario.find('ragioneSociale').text + '<br/>\n'
     if (aggiudicatario.find('codiceFiscale') is not None):
-      foutput.write(INDENT*8 + '<strong>C.F. :</strong> ' + aggiudicatario.find('codiceFiscale').text + '\n' + INDENT*7 + '</li>\n')
+      tableRow += INDENT*8 + '<strong>C.F. :</strong> ' + aggiudicatario.find('codiceFiscale').text + '\n' + INDENT*7 + '</li>\n'
     else:
-      foutput.write(INDENT*8 + '<strong>I.F.E. :</strong> ' + aggiudicatario.find('identificativoFiscaleEstero').text + '\n' + INDENT*7 + '</li>\n')
+      tableRow += INDENT*8 + '<strong>I.F.E. :</strong> ' + aggiudicatario.find('identificativoFiscaleEstero').text + '\n' + INDENT*7 + '</li>\n'
   for raggruppamento in aggiudicatari.iter('aggiudicatarioRaggruppamento'):
-    foutput.write(INDENT*7 + '<li>Raggruppamento\n')
-    foutput.write(INDENT*8 + '<ul>\n')
+    tableRow += INDENT*7 + '<li>Raggruppamento\n'
+    tableRow += INDENT*8 + '<ul>\n'
     for membro in raggruppamento.iter('membro'):
-      foutput.write(INDENT*9 + '<li>\n' + INDENT*10 + '<strong>Ditta:</strong> ' + membro.find('ragioneSociale').text + '<br/>\n')
+      tableRow += INDENT*9 + '<li>\n' + INDENT*10 + '<strong>Ditta:</strong> ' + membro.find('ragioneSociale').text + '<br/>\n'
       if (membro.find('codiceFiscale') is not None):
-        foutput.write(INDENT*10 + '<strong>C.F. :</strong> ' + membro.find('codiceFiscale').text + '<br/>\n')
+        tableRow += INDENT*10 + '<strong>C.F. :</strong> ' + membro.find('codiceFiscale').text + '<br/>\n'
       else:
-        foutput.write(INDENT*10 + '<strong>I.F.E. :</strong> ' + membro.find('identificativoFiscaleEstero').text + '<br/>\n')
-      foutput.write(INDENT*10 + '<strong>Ruolo:</strong> ' + membro.find('ruolo').text + '\n' + INDENT*9 + '</li>\n')
-    foutput.write(INDENT*8 + '</ul>\n')
-    foutput.write(INDENT*7 + '</li>\n')
-  foutput.write(INDENT*6 + '</ul>\n')
-  foutput.write(INDENT*5 + '</td>\n')
-  foutput.write(INDENT*4 + '</tr>\n')
-foutput.write(INDENT*3 + '</tbody>\n')
-foutput.write(INDENT*2 + '</table>\n')
+        tableRow += INDENT*10 + '<strong>I.F.E. :</strong> ' + membro.find('identificativoFiscaleEstero').text + '<br/>\n'
+      tableRow += INDENT*10 + '<strong>Ruolo:</strong> ' + membro.find('ruolo').text + '\n' + INDENT*9 + '</li>\n'
+    tableRow += INDENT*8 + '</ul>\n'
+    tableRow += INDENT*7 + '</li>\n'
+  tableRow += INDENT*6 + '</ul>\n'
+  tableRow += INDENT*5 + '</td>\n'
+  tableRow += INDENT*4 + '</tr>\n'
+
+  # Aggiungo la riga ottenuta alla lista delle righe della tabella
+  dizionarioProponenti[cfp][1].append(tableRow)
+
+
+# Finito il ciclo su tutti i lotti e popolato il dizionario dei proponenti
+# passo alle stampe delle tabelle HTML
+for k,v in dizionarioProponenti.iteritems():
+  foutput.write(INDENT*2 + '<h3>Struttura proponente</h3>\n')
+  foutput.write(INDENT*3 + '<ul>\n')
+  foutput.write(INDENT*4 + '<li>Denominazione: ' + v[0] + '</li>\n')
+  foutput.write(INDENT*4 + '<li>Codice fiscale: ' + k + '</li>\n')
+  foutput.write(INDENT*3 + '</ul>\n')
+  # Tabella dei lotti
+  foutput.write(INDENT*2 + '<table border="1">\n')
+  foutput.write(INDENT*3 + '<thead>\n' + INDENT*4 + '<tr>\n' +
+                INDENT*5 + '<th>Lotto</th>\n' + INDENT*5 +'<th>Partecipanti</th>\n' +
+                INDENT*5 + '<th>Aggiudicatari</th>\n' + INDENT*4 + '</tr>\n' +
+                INDENT*3 + '<thead>\n' +
+                INDENT*3 + '<tbody>\n')
+  # Stampo le righe della tabella che corrispondono ad ogni elemento della lista
+  for tr in v[1]:
+    foutput.write(tr)
+  # Chiudo tabella lotti
+  foutput.write(INDENT*3 + '</tbody>\n')
+  foutput.write(INDENT*2 + '</table>\n')
+
+# Chiudo pagina HTML
 foutput.write(INDENT + '</body>\n')
 foutput.write('</html>\n')
+
+# Chiudo file
 foutput.close()
