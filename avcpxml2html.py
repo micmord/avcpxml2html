@@ -209,15 +209,16 @@ for lotto in lotti.iter('lotto'):
   # Aggiungo la riga ottenuta alla lista delle righe della tabella
   dizionarioProponenti[cfp][1].append(tableRow)
 
-
-# Finito il ciclo su tutti i lotti e popolato il dizionario dei proponenti
+# Finito il ciclo su tutti i lotti e, popolato il dizionario dei proponenti,
 # passo alle stampe delle tabelle HTML
+foutput.write(INDENT*2 + '<h4>Elenco strutture proponenti</h4>\n')
+foutput.write(INDENT*2 + '<ul>\n')
 for k,v in dizionarioProponenti.iteritems():
-  foutput.write(INDENT*2 + '<h3>Struttura proponente</h3>\n')
-  foutput.write(INDENT*3 + '<ul>\n')
-  foutput.write(INDENT*4 + '<li>Denominazione: ' + v[0] + '</li>\n')
-  foutput.write(INDENT*4 + '<li>Codice fiscale: ' + k + '</li>\n')
-  foutput.write(INDENT*3 + '</ul>\n')
+  foutput.write(INDENT*3 + '<li><a href="#' + k + '">' + v[0] + '</a></li>\n')
+foutput.write(INDENT*2 + '</ul>\n')
+
+for k,v in dizionarioProponenti.iteritems():
+  foutput.write(INDENT*2 + '<h3><a name="' + k +'">' + v[0] + '</a> (codice fiscale: ' + k + ')</h3>\n')
   # Tabella dei lotti
   foutput.write(INDENT*2 + '<table border="1">\n')
   foutput.write(INDENT*3 + '<thead>\n' + INDENT*4 + '<tr>\n' +
