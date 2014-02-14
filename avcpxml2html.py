@@ -21,7 +21,7 @@ Specifiche XML:
  * http://dati.avcp.it/schema/datasetAppaltiL190.xsd
  * http://dati.avcp.it/schema/TypesL190.xsd
 
-Tested with Python 2.7
+Tested with Python2.7 and Python3.3
 
 @author: Michele Mordenti
 @version: 0.3-dev
@@ -42,8 +42,8 @@ ND = 'n/d' # rappresentazione dato non disponibile
 
 # Leggo argomenti
 if len(sys.argv)!=2 :
-    print 'Specificare il nome del file contenete il tracciato record XML di AVCP'
-    print 'Esempio: ' + sys.argv[0] + 'avcp_dataset_2013.xml'
+    print ('Specificare il nome del file contenete il tracciato record XML di AVCP')
+    print ('Esempio: ' + sys.argv[0] + 'avcp_dataset_2013.xml')
     sys.exit(1)
 
 XML_INPUT=sys.argv[1]
@@ -52,7 +52,7 @@ try:
     tree = ET.parse(XML_INPUT)
     foutput = codecs.open(XML_INPUT + '.html', 'w', encoding=CODIFICA_XML_SORGENTE)
 except IOError:
-    print 'Non posso aprire il file' + XML_INPUT
+    print ('Non posso aprire il file' + XML_INPUT)
     sys.exit(2)
 
 
@@ -130,7 +130,7 @@ lotti = root.find('data')
 for lotto in lotti.iter('lotto'):
   proponente = lotto.find('strutturaProponente').find('denominazione').text
   cfp = lotto.find('strutturaProponente').find('codiceFiscaleProp').text
-  if not dizionarioProponenti.has_key(cfp):
+  if cfp not in dizionarioProponenti:
     dizionarioProponenti[cfp] = [proponente,[]]
   # Colonna lotti
   tableRow = INDENT*4 + '<tr>\n' + INDENT*5 + '<td>\n' + INDENT* 6 + '<strong>CIG:</strong> '
@@ -213,11 +213,11 @@ for lotto in lotti.iter('lotto'):
 # passo alle stampe delle tabelle HTML
 foutput.write(INDENT*2 + '<h4>Elenco strutture proponenti</h4>\n')
 foutput.write(INDENT*2 + '<ul>\n')
-for k,v in dizionarioProponenti.iteritems():
+for k,v in dizionarioProponenti.items():
   foutput.write(INDENT*3 + '<li><a href="#' + k + '">' + v[0] + '</a></li>\n')
 foutput.write(INDENT*2 + '</ul>\n')
 
-for k,v in dizionarioProponenti.iteritems():
+for k,v in dizionarioProponenti.items():
   foutput.write(INDENT*2 + '<h3><a name="' + k +'">' + v[0] + '</a> (codice fiscale: ' + k + ')</h3>\n')
   # Tabella dei lotti
   foutput.write(INDENT*2 + '<table border="1">\n')

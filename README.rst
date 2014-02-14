@@ -31,7 +31,7 @@ Specifiche AVCP XML
 Note
 ~~~~
 
-Tested with Python 2.7
+Tested with Python2.7 and Python3.3
 
 :author: Michele Mordenti
 :version: 0.3-dev
