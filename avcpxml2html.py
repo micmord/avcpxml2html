@@ -46,11 +46,11 @@ if len(sys.argv)!=2 :
     print ('Esempio: ' + sys.argv[0] + 'avcp_dataset_2013.xml')
     sys.exit(1)
 
-XML_INPUT=sys.argv[1]
+XML_INPUT = sys.argv[1]
 
 try:
     tree = ET.parse(XML_INPUT)
-    foutput = codecs.open(XML_INPUT + '.html', 'w', encoding=CODIFICA_XML_SORGENTE)
+    foutput = codecs.open(XML_INPUT.rstrip('.xml') + '.html', 'w', encoding=CODIFICA_XML_SORGENTE)
 except IOError:
     print ('Non posso aprire il file' + XML_INPUT)
     sys.exit(2)

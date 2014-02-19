@@ -11,7 +11,7 @@ Utilizzo
 
   python avcpxml2html.py avcp_dataset_2013.xml
 
-Produce (*forse*) il file avcp_dataset_2013.xml.html
+Produce (*forse*) il file avcp_dataset_2013.html
 
 Il file XML in ingresso deve essere formalmente valido.
 Un modo per validare il file XML in ingresso è fare uso del programma `xmllint`__ incluso nella libreria `libxml2`__::
