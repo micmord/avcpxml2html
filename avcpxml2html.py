@@ -78,6 +78,25 @@ def convertiData(data):
     return data
   return ND
 
+
+def convertiValuta(importo):
+  ''' Banale funzione per la conversione della valuta
+      I metodi Python di formattazione delle stringhe
+      non mi garbano, faccio a mano
+  '''
+  if '.' in importo:
+    tmp = importo.split('.')
+    euro = tmp[0]
+    centesimi = tmp[1]
+  else:
+    euro = importo
+    centesimi = '00'
+  terne = ''
+  while len(euro) > 3:
+    terne = '.' + euro[-3:] + terne
+    euro = euro[:-3]
+  return (euro[-3:] + terne + ',' + centesimi)
+
 # Radice del tracciato XML
 root = tree.getroot()
 # metadata tag
@@ -140,9 +159,9 @@ for lotto in lotti.iter('lotto'):
   tableRow += INDENT*6 + '<strong>Procedura di scelta del contraente:</strong> '
   tableRow += lotto.find('sceltaContraente').text + '<br/>\n'
   tableRow += INDENT*6 + '<strong>Importo di aggiudicazione:</strong> '
-  tableRow += lotto.find('importoAggiudicazione').text + ' ' + u'\u20ac' + '<br/>\n'
+  tableRow += convertiValuta(lotto.find('importoAggiudicazione').text) + ' ' + u'\u20ac' + '<br/>\n'
   tableRow += INDENT*6 + '<strong>Importo delle somme liquidate:</strong> '
-  tableRow += lotto.find('importoSommeLiquidate').text + ' ' + u'\u20ac' + '<br/>\n'
+  tableRow += convertiValuta(lotto.find('importoSommeLiquidate').text) + ' ' + u'\u20ac' + '<br/>\n'
   tableRow += INDENT*6 + '<strong>Tempi di completamento:</strong> dal '
   dataInizio =lotto.find('tempiCompletamento').find('dataInizio')
   dataFine = lotto.find('tempiCompletamento').find('dataUltimazione')
