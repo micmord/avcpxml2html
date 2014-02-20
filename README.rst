@@ -34,7 +34,7 @@ Note
 Tested with Python2.7 and Python3.3
 
 :author: Michele Mordenti
-:version: 0.3
+:version: 0.3.1-dev
 :license: GNU GPL v.3
 
 
