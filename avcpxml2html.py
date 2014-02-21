@@ -230,11 +230,13 @@ for lotto in lotti.iter('lotto'):
 
 # Finito il ciclo su tutti i lotti e, popolato il dizionario dei proponenti,
 # passo alle stampe delle tabelle HTML
-foutput.write(INDENT*2 + '<h4>Elenco strutture proponenti</h4>\n')
-foutput.write(INDENT*2 + '<ul>\n')
-for k,v in dizionarioProponenti.items():
-  foutput.write(INDENT*3 + '<li><a href="#' + k + '">' + v[0] + '</a></li>\n')
-foutput.write(INDENT*2 + '</ul>\n')
+# In caso di piu' proponenti ricorriamo ad un indice
+if len(dizionarioProponenti) > 1:
+  foutput.write(INDENT*2 + '<h4>Elenco strutture proponenti</h4>\n')
+  foutput.write(INDENT*2 + '<ul>\n')
+  for k,v in dizionarioProponenti.items():
+    foutput.write(INDENT*3 + '<li><a href="#' + k + '">' + v[0] + '</a></li>\n')
+  foutput.write(INDENT*2 + '</ul>\n')
 
 for k,v in dizionarioProponenti.items():
   foutput.write(INDENT*2 + '<h3><a name="' + k +'">' + v[0] + '</a> (codice fiscale: ' + k + ')</h3>\n')
